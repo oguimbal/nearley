@@ -1,80 +1,47 @@
-# [nearley](http://nearley.js.org) ↗️
-[![JS.ORG](https://img.shields.io/badge/js.org-nearley-ffb400.svg?style=flat-square)](http://js.org)
-[![npm version](https://badge.fury.io/js/nearley.svg)](https://badge.fury.io/js/nearley)
+# This is only a Deno-compatible version of [nearley](https://github.com/kach/nearley)
 
-nearley is a simple, fast and powerful parsing toolkit. It consists of:
-1. [A powerful, modular DSL for describing
-   languages](https://nearley.js.org/docs/grammar)
-2. [An efficient, lightweight Earley
-   parser](https://nearley.js.org/docs/parser)
-3. [Loads of tools, editor plug-ins, and other
-   goodies!](https://nearley.js.org/docs/tooling)
+# ⚠ It only includes the nearley parser. Not the compiler.
 
-nearley is a **streaming** parser with support for catching **errors**
-gracefully and providing _all_ parsings for **ambiguous** grammars. It is
-compatible with a variety of **lexers** (we recommend
-[moo](http://github.com/tjvr/moo)). It comes with tools for creating **tests**,
-**railroad diagrams** and **fuzzers** from your grammars, and has support for a
-variety of editors and platforms. It works in both node and the browser.
+In order to compile your `.ne` files, you'll have to install the `nearley` npm package, and follow instructions as if you were running node.
 
-Unlike most other parser generators, nearley can handle *any* grammar you can
-define in BNF (and more!). In particular, while most existing JS parsers such
-as PEGjs and Jison choke on certain grammars (e.g. [left recursive
-ones](http://en.wikipedia.org/wiki/Left_recursion)), nearley handles them
-easily and efficiently by using the [Earley parsing
-algorithm](https://en.wikipedia.org/wiki/Earley_parser).
+# Usage
 
-nearley is used by a wide variety of projects:
+## First, you'll have to compile your grammar
 
-- [artificial
-  intelligence](https://github.com/ChalmersGU-AI-course/shrdlite-course-project)
-  and
-- [computational
-  linguistics](https://wiki.eecs.yorku.ca/course_archive/2014-15/W/6339/useful_handouts)
-  classes at universities;
-- [file format parsers](https://github.com/raymond-h/node-dmi);
-- [data-driven markup languages](https://github.com/idyll-lang/idyll-compiler);
-- [compilers for real-world programming
-  languages](https://github.com/sizigi/lp5562);
-- and nearley itself! The nearley compiler is bootstrapped.
+```bash
+npm install nearley -D
+nearleyc my-grammar.ne -o my-compiled-grammar.ts
+```
 
-nearley is an npm [staff
-pick](https://www.npmjs.com/package/npm-collection-staff-picks).
+⚠ You grammar MUST compile to Typescript. To do so, include `@preprocessor typescript` on top of it.
 
-## Documentation
+nb: If you use Moo as a lexer, do it like that:
 
-Please visit our website https://nearley.js.org to get started! You will find a
-tutorial, detailed reference documents, and links to several real-world
-examples to get inspired.
+```nearley
+@{%
 
-## Contributing
+import moo from "https://deno.land/x/moo@0.5.1.1/index.ts";
 
-Please read [this document](.github/CONTRIBUTING.md) *before* working on
-nearley. If you are interested in contributing but unsure where to start, take
-a look at the issues labeled "up for grabs" on the issue tracker, or message a
-maintainer (@kach or @tjvr on Github).
+// unfortunately, there will be a typescript error if you dont cast it to any :(
+let lexer: any = moo.compile({
+    // you lexer
+})
 
-nearley is MIT licensed.
+%}
 
-A big thanks to Nathan Dinsmore for teaching me how to Earley, Aria Stewart for
-helping structure nearley into a mature module, and Robin Windels for
-bootstrapping the grammar. Additionally, Jacob Edelman wrote an experimental
-JavaScript parser with nearley and contributed ideas for EBNF support. Joshua
-T. Corbin refactored the compiler to be much, much prettier. Bojidar Marinov
-implemented postprocessors-in-other-languages. Shachar Itzhaky fixed a subtle
-bug with nullables.
+@lexer lexer
+```
 
-## Citing nearley
+### Then, you can use it in Deno:
 
-If you are citing nearley in academic work, please use the following BibTeX
-entry.
+```typescript
+import { Parser, Grammar } from "https://deno.land/x/nearley@2.19.7/index.ts";
 
-```bibtex
-@misc{nearley,
-    author = "Kartik Chandra and Tim Radvan",
-    title  = "{nearley}: a parsing toolkit for {JavaScript}",
-    year   = {2014},
-    doi    = {10.5281/zenodo.3897993},
-    url    = {https://github.com/kach/nearley}
-}
+import myCompiledGrammar from './my-compiled-grammar.ts';
+
+const grammar = Grammar.fromCompiled(myCompiledGrammar);
+const parser = new Parser(grammar);
+
+// use it as you would with node
+parser.feed('some valid text');
 ```
