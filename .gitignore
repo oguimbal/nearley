@@ -1,13 +1,3 @@
-out.js
+sample/package-lock.json
 node_modules/
-docs/node_modules/
-.DS_Store
-test/profile.log
-test/grammars/parens.js
-test/grammars/whitespace.js
-*.swp
-*.ps1
-*.cmd
-*.bat
-npm-debug.log
-sandbox/
+!node_modules/@types/nearley/index.d.ts

@@ -1,0 +1,10 @@
+{
+  "name": "nearley-deno",
+  "version": "1.0.0",
+  "scripts": {
+    "generate": "nearleyc json.ne -o json.ts"
+  },
+  "devDependencies": {
+    "nearley": "^2.19.7"
+  }
+}
