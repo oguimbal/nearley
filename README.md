@@ -20,7 +20,7 @@ nb: If you use Moo as a lexer, do it like that:
 ```nearley
 @{%
 
-import moo from "https://deno.land/x/moo@0.5.1-deno/mod.ts";
+import * as moo from "https://deno.land/x/moo@0.5.1-deno.2/mod.ts";
 
 // unfortunately, there will be a typescript error if you dont cast it to any :(
 let lexer: any = moo.compile({

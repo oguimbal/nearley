@@ -4,7 +4,7 @@
 # http://www.asciitable.com/
 @{%
 
-import moo from "https://deno.land/x/moo@0.5.1-deno/mod.ts";
+import * as moo from "https://deno.land/x/moo@0.5.1-deno.2/mod.ts";
 
 let lexer: any = moo.compile({
     space: {match: /\s+/, lineBreaks: true},

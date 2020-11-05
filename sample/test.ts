@@ -1,8 +1,11 @@
 import jsonGrammar from './json.ts';
-import { Parser, Grammar } from '../index.ts';
+// import { Parser, Grammar } from "https://deno.land/x/nearley@2.19.7-deno/mod.ts";
+import { Parser, Grammar } from '../mod.ts';
+import * as mod from '../mod.ts';
 
-const grammar = Grammar.fromCompiled(jsonGrammar);
-const parser = new Parser(grammar);
+// mod.Grammar
+const grammar: Grammar = Grammar.fromCompiled(jsonGrammar);
+const parser: mod.Parser = new Parser(grammar);
 
 parser.feed('{"test": 42}');
 const asts = parser.finish();
